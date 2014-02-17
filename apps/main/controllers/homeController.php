@@ -2,7 +2,7 @@
 
 /**
  * Default controller
- * @class indexController
+ * @class homeController
  */
 class homeController extends Controller
 {
