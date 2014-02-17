@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Config class for index bundle
- * @class indexConfig
+ * Config class for main bundle
  */
 class mainConfig extends Config
 {

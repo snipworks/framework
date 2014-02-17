@@ -8,7 +8,6 @@ class homeController extends Controller
 {
     /**
      * Default action (list users)
-     * @action doIndex
      */
     public function indexAction()
     {
@@ -44,8 +43,7 @@ class homeController extends Controller
     }
 
     /**
-     * Find function
-     * @action doFind
+     * Find user by id
      */
     public function viewAction()
     {
@@ -61,7 +59,7 @@ class homeController extends Controller
     }
 
     /**
-     * Edit function
+     * Edit user information
      */
     public function editAction()
     {
