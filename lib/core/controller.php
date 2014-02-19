@@ -27,6 +27,12 @@ abstract class Controller
         if (!method_exists($this, $name)) {
             throw new Exception('Call to undefined method ' . get_class($this) . '::' . $name);
         }
+
+        $action = new ReflectionMethod($this, $name);
+        if (!$action->isPublic()) {
+            throw new Exception('Access denied to call ' . get_class($this) . '::' . $name);
+        }
+
         return call_user_func(array($this, $name), $args);
     }
 
@@ -56,9 +62,9 @@ abstract class Controller
     final public function execute($action)
     {
         $action .= 'Action';
-        $this->preAction();
+        $this->initialize();
         $display = $this->{$action}();
-        $this->postAction();
+        $this->finalize();
         if ($display !== View::NONE) {
             $this->view->render();
         }
@@ -67,7 +73,7 @@ abstract class Controller
     /**
      * Function before execute action
      */
-    public function preAction()
+    public function initialize()
     {
 
     }
@@ -75,7 +81,7 @@ abstract class Controller
     /**
      * Function after execute action
      */
-    public function postAction()
+    public function finalize()
     {
 
     }

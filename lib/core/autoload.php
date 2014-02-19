@@ -1,18 +1,48 @@
 <?php
 
 define('ROOT_DIR', dirname(dirname(__DIR__)) . '/');
+Autoload::initialize();
 
-require_once(__DIR__ . '/common.php');
-require_once(__DIR__ . '/project.php');
-require_once(__DIR__ . '/config.php');
-require_once(__DIR__ . '/request.php');
-require_once(__DIR__ . '/database.php');
-require_once(__DIR__ . '/model.php');
-require_once(__DIR__ . '/view.php');
-require_once(__DIR__ . '/controller.php');
+/**
+ * Class for autoloader
+ * @class Autoload
+ */
+class Autoload
+{
+    /**
+     * Initialize autoload class
+     */
+    public static function initialize()
+    {
+        require_once(__DIR__ . '/common.php');
+        require_once(__DIR__ . '/project.php');
+        require_once(__DIR__ . '/config.php');
+        require_once(__DIR__ . '/request.php');
+        require_once(__DIR__ . '/database.php');
+        require_once(__DIR__ . '/model.php');
+        require_once(__DIR__ . '/view.php');
+        require_once(__DIR__ . '/controller.php');
+        self::register(array('self', 'frameworkAutoload'), true, false);
+    }
 
-spl_autoload_register(
-    function ($class_name) {
+    /**
+     * Register autoload function (Wrapper for SPL Autoload Register)
+     * @param Closure|Callable|mixed $function
+     * @param bool $throw
+     * @param bool $prepend
+     */
+    public static function register($function, $throw = true, $prepend = true)
+    {
+        spl_autoload_register($function, $throw, $prepend);
+    }
+
+    /**
+     * Default framework autoload function
+     * @param $class_name
+     * @throws Exception
+     */
+    protected static function frameworkAutoload($class_name)
+    {
         $bundle = Project::getBundle();
         if (endsWith(Project::CONTROLLER, $class_name)) {
             $filename = 'apps/' . $bundle . '/controllers/' . $class_name . '.php';
@@ -28,4 +58,4 @@ spl_autoload_register(
         }
         require_once(ROOT_DIR . $filename);
     }
-);
+}

@@ -12,6 +12,7 @@ class Project
     const DEFAULT_BUNDLE = 'main';
 
     private static $bundle;
+    private $error_file;
 
     /**
      * @param $bundle
@@ -49,13 +50,10 @@ class Project
         $config = null;
         try {
             $config = $this->setupConfiguration();
+            $this->error_file = $config->getErrorFile();
             $this->dispatch();
         } catch (Exception $e) {
-            if (($config instanceof Config) && !is_null($config->getErrorFile())){
-                $this->buildErrorPage($e, $config->getErrorFile());
-            } else {
-                die($e->__toString());
-            }
+            $this->buildErrorPage($e);
         }
     }
 
@@ -85,18 +83,29 @@ class Project
     }
 
     /**
-     * Create error page
-     * @param Exception $exception
-     * @param $error_file
+     * Display error page and contents
+     * @param Exception $e
      */
-    private function buildErrorPage(Exception $exception, $error_file)
+    private function buildErrorPage(Exception $e)
+    {
+        $content = (!is_null($this->error_file)) ? $this->getErrorPageContent($e) : $e->__toString();
+        die($content);
+    }
+
+    /**
+     * Create error page content
+     * @param Exception $exception
+     * @return string
+     */
+    private function getErrorPageContent(Exception $exception) //$exception param can be used in error file view
     {
         ob_start();
-        require_once($error_file);
-        $page = ob_get_clean();
+        require_once($this->error_file);
+        $page = ob_get_contents();
         ob_end_clean();
-        echo $page;
+        return $page;
     }
+
     /**
      * @param $controller
      * @return Controller

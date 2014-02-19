@@ -49,7 +49,6 @@ class User extends Model
         if (!$this->username || !$this->password) {
             throw new Exception('Username/Password cannot be empty');
         }
-        $this->password = md5($this->password);
     }
 
     /**

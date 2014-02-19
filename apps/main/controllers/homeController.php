@@ -11,15 +11,15 @@ class homeController extends Controller
      */
     public function indexAction()
     {
+        $users = null;
         try {
             $con = Database::getConnection(Database::DEFAULT_SETTING);
             $users = User::find($con);
+            $this->msg = null;
         } catch (Exception $e) {
-            $users = null;
+            $this->msg = $e->getMessage();
         }
-
         $this->users = $users;
-        $this->msg = null;
     }
 
     /**

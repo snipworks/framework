@@ -1,12 +1,12 @@
+<?php if ($msg): ?>
+    <div class="alert alert-danger"><?php echo $msg ?></div><br/><br/>
+<?php endif ?>
+
 <?php use_helper('html.php') ?>
 <a href="/home/create" class="btn btn-primary">Create</a><br/><br/>
 <?php if (!$users): ?>
-    <div class="alert alert-danger">No user(s) found.</div>
+    <div class="alert alert-info">No user(s) found.</div>
 <?php else: ?>
-    <?php if ($msg): ?>
-        <div class="alert alert-info"><?php echo $msg ?></div><br/><br/>
-    <?php endif ?>
-
     <table class="table table-bordered">
         <tr>
             <th>ID</th>
