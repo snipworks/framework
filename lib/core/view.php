@@ -46,11 +46,21 @@ class View
     public function render()
     {
         $contents = $this->getOutput();
+        require_once($this->getLayoutFile());
+    }
+
+    /**
+     * Check and get HTML Layout file path
+     * @return string
+     * @throws Exception
+     */
+    private function getLayoutFile()
+    {
         $layout = ROOT_DIR . 'apps/' . Project::getBundle() . '/templates/layout.php';
         if (!file_exists($layout)) {
             throw new Exception('File ' . $layout . ' not found.');
         }
-        require_once($layout);
+        return $layout;
     }
 
     /**
