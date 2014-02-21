@@ -27,11 +27,11 @@ class Autoload
 
     /**
      * Register autoload function (Wrapper for SPL Autoload Register)
-     * @param Closure|Callable|mixed $function
+     * @param mixed $function
      * @param bool $throw
      * @param bool $prepend
      */
-    public static function register($function, $throw = true, $prepend = true)
+    public static function register($function, $throw = true, $prepend = false)
     {
         spl_autoload_register($function, $throw, $prepend);
     }

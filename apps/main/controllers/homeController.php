@@ -85,6 +85,7 @@ class homeController extends Controller
             }
         } catch (Exception $e) {
             $this->msg = $e->getMessage();
+            $this->setTemplate('index');
         }
     }
 
@@ -100,5 +101,6 @@ class homeController extends Controller
         } catch (Exception $e) {
             $this->msg = $e->getMessage();
         }
+        $this->setTemplate('index');
     }
 }

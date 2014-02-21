@@ -49,7 +49,7 @@ abstract class Request
     /**
      * Return request parameter value
      * @param $key
-     * @param null $default
+     * @param $default
      * @return mixed
      */
     public static function getParameter($key, $default = null)

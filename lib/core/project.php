@@ -11,16 +11,18 @@ class Project
     const CONFIG = 'Config';
     const DEFAULT_BUNDLE = 'main';
 
+    private static $instance;
     private static $bundle;
     private $error_file;
 
     /**
      * @param $bundle
      */
-    public function __construct($bundle)
+    private function __construct($bundle)
     {
         self::$bundle = (!$bundle) ? self::DEFAULT_BUNDLE : $bundle;
         Request::initialize();
+        return self::$instance;
     }
 
     /**
@@ -30,7 +32,10 @@ class Project
      */
     public static function create($bundle)
     {
-        return new self($bundle);
+        if (!self::$instance) {
+            return new self($bundle);
+        }
+        return self::$instance;
     }
 
     /**
@@ -47,10 +52,8 @@ class Project
      */
     public function build()
     {
-        $config = null;
         try {
-            $config = $this->setupConfiguration();
-            $this->error_file = $config->getErrorFile();
+            $this->setupConfiguration();
             $this->dispatch();
         } catch (Exception $e) {
             $this->buildErrorPage($e);
@@ -70,6 +73,7 @@ class Project
         /** @var Config $config */
         $config = new $config_name;
         $config->setup();
+        $this->error_file = $config->getErrorFile();
         return $config;
     }
 
@@ -88,8 +92,10 @@ class Project
      */
     private function buildErrorPage(Exception $e)
     {
-        $content = (!is_null($this->error_file)) ? $this->getErrorPageContent($e) : $e->__toString();
-        die($content);
+        header('HTTP/1.1 500 Internal Server Error', null, 500);
+        echo((!file_exists($this->error_file)) ? $this->getErrorPageContent($e) : $e->__toString());
+        error_log($e->getMessage());
+        exit;
     }
 
     /**
@@ -107,6 +113,7 @@ class Project
     }
 
     /**
+     * Create controller class instance
      * @param $controller
      * @return Controller
      * @throws Exception

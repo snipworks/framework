@@ -7,6 +7,7 @@
 class Database extends PDO
 {
     const DEFAULT_SETTING = 'default';
+    const DEFAULT_CHARSET = 'UTF-8';
 
     /** @var Database[] $instance */
     private static $instance;
@@ -21,7 +22,7 @@ class Database extends PDO
         if (!self::$instance[$setting]) {
             $config = self::getSettings($setting);
             self::$instance[$setting] = new self(
-                $config['type'] . ':host=' . $config['host'] . ';dbname=' . $config['db'],
+                self::createDSN($config),
                 $config['user'],
                 $config['pass']
             );
@@ -50,6 +51,18 @@ class Database extends PDO
         }
 
         return $ini_config[$key];
+    }
+
+    /**
+     * Create data source name from config
+     * @param array $config
+     * @return string
+     */
+    protected static function createDSN(array $config)
+    {
+        $charset = (array_key_exists('charset', $config) && $config['charset']) ?
+            $config['charset'] : self::DEFAULT_CHARSET;
+        return $config['driver'] . ':host=' . $config['host'] . ';dbname=' . $config['db'] . ';charset=' . $charset;
     }
 
     /**

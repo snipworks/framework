@@ -56,11 +56,11 @@ class View
      */
     private function getLayoutFile()
     {
-        $layout = ROOT_DIR . 'apps/' . Project::getBundle() . '/templates/layout.php';
-        if (!file_exists($layout)) {
+        $layout = 'apps/' . Project::getBundle() . '/templates/layout.php';
+        if (!file_exists(ROOT_DIR . $layout)) {
             throw new Exception('File ' . $layout . ' not found.');
         }
-        return $layout;
+        return ROOT_DIR . $layout;
     }
 
     /**
@@ -86,14 +86,14 @@ class View
      */
     private function validateView()
     {
-        $filename = ROOT_DIR . 'apps/' . Project::getBundle() .
+        $filename = 'apps/' . Project::getBundle() .
             '/views/' . Request::getController() . '/' . $this->template . '.php';
 
-        if (!file_exists($filename)) {
+        if (!file_exists(ROOT_DIR . $filename)) {
             throw new Exception('File ' . $filename . ' not found.');
         }
         $this->data = (!$this->data) ? array() : $this->data;
-        $this->view_file = $filename;
+        $this->view_file = ROOT_DIR . $filename;
     }
 
     /**

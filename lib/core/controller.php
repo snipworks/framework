@@ -32,8 +32,6 @@ abstract class Controller
         if (!$action->isPublic()) {
             throw new Exception('Access denied to call ' . get_class($this) . '::' . $name);
         }
-
-        return call_user_func(array($this, $name), $args);
     }
 
     /**
