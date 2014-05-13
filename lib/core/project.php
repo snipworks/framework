@@ -33,7 +33,7 @@ class Project
     public static function create($bundle)
     {
         if (!self::$instance) {
-            return new self($bundle);
+            return new self(trim($bundle));
         }
         return self::$instance;
     }
@@ -82,8 +82,11 @@ class Project
      */
     private function dispatch()
     {
-        $controller = self::createController(Request::getController());
-        $controller->execute(Request::getAction());
+        list($controller_name, $action_name) = self::createModule();
+
+        /** @var Controller $controller */
+        $controller = new $controller_name;
+        $controller->execute($action_name);
     }
 
     /**
@@ -93,7 +96,7 @@ class Project
     private function buildErrorPage(Exception $e)
     {
         header('HTTP/1.1 500 Internal Server Error', null, 500);
-        echo((!file_exists($this->error_file)) ? $this->getErrorPageContent($e) : $e->__toString());
+        echo((file_exists($this->error_file)) ? $this->getErrorPageContent($e) : $e->__toString());
         error_log($e->getMessage());
         exit;
     }
@@ -113,17 +116,18 @@ class Project
     }
 
     /**
-     * Create controller class instance
-     * @param $controller
-     * @return Controller
+     * Generate controller and action names from request
+     * @return array
      * @throws Exception
      */
-    private static function createController($controller)
+    private static function createModule()
     {
-        $controller .= self::CONTROLLER;
+        $controller = Request::getController() . self::CONTROLLER;
+        $action = Request::getAction() . 'Action';
+
         if (!class_exists($controller)) {
             throw new Exception('Class ' . $controller . ' not found.');
         }
-        return new $controller;
+        return array($controller, $action);
     }
 }

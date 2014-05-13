@@ -3,7 +3,7 @@
 /**
  * Config class for main bundle
  */
-class mainConfig extends Config
+class MainConfig extends Config
 {
     /**
      * Setup function for config

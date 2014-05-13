@@ -22,7 +22,7 @@ class Autoload
         require_once(__DIR__ . '/model.php');
         require_once(__DIR__ . '/view.php');
         require_once(__DIR__ . '/controller.php');
-        self::register(array('self', 'frameworkAutoload'), true, false);
+        self::register(array(__CLASS__, 'frameworkAutoload'), true, false);
     }
 
     /**
@@ -45,14 +45,16 @@ class Autoload
     {
         $bundle = Project::getBundle();
         if (endsWith(Project::CONTROLLER, $class_name)) {
-            $filename = 'apps/' . $bundle . '/controllers/' . $class_name . '.php';
+            $format = 'apps/' . $bundle . '/controllers/%s.php';
         } elseif (endsWith(Project::CONFIG, $class_name)) {
-            $filename = 'config/' . $class_name . '.php';
+            $format = 'config/%s.php';
         } elseif (endsWith(Project::UTIL, $class_name)) {
-            $filename = 'lib/util/' . $class_name . '.php';
+            $format = 'lib/util/%s.php';
         } else {
-            $filename = 'lib/model/' . $class_name . '.php';
+            $format = 'lib/model/%s.php';
         }
+
+        $filename = sprintf($format, str_underscore($class_name));
         if (!file_exists(ROOT_DIR . $filename)) {
             throw new Exception('Call to undefined class "' . $class_name . '"');
         }

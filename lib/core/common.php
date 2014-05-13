@@ -70,3 +70,19 @@ function str_underscore($str)
 {
     return strtolower(preg_replace('/(?<=\\w)([A-Z]+)/', '_\\1', $str));
 }
+
+/**
+ * Create url link
+ * @param $url
+ * @param array $params
+ * @return string
+ */
+function url($url, $params = array()) {
+    $url = (strpos($url, '/') === 0) ? $url : Request::getFrontController() . '/' . $url;
+    if (!$params) {
+        return $url;
+    }
+
+    $query = http_build_query($params);
+    return $url . ((strpos($url, '?') !== false) ? '&' : '?') . $query;
+}

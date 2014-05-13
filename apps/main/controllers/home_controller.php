@@ -2,9 +2,9 @@
 
 /**
  * Default controller
- * @class homeController
+ * @class HomeController
  */
-class homeController extends Controller
+class HomeController extends Controller
 {
     /**
      * Default action (list users)

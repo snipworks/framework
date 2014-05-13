@@ -17,7 +17,7 @@
                 <div class="nav-collapse collapse">
                     <ul class="nav">
                         <li class="">
-                            <a href="/">Home</a>
+                            <a href="<?php echo(url('/home')) ?>">Home</a>
                         </li>
                     </ul>
                 </div>

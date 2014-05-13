@@ -5,6 +5,9 @@
  */
 abstract class Controller
 {
+    const VIEW_CLASS = 'View';
+
+    /** @var View $view */
     private $view;
 
     /**
@@ -12,7 +15,9 @@ abstract class Controller
      */
     final public function __construct()
     {
-        $this->view = new View();
+        $view_class = static::VIEW_CLASS;
+        $this->view = new $view_class;
+        unset($view_class);
     }
 
     /**
@@ -59,7 +64,6 @@ abstract class Controller
      */
     final public function execute($action)
     {
-        $action .= 'Action';
         $this->initialize();
         $display = $this->{$action}();
         $this->finalize();
@@ -71,7 +75,7 @@ abstract class Controller
     /**
      * Function before execute action
      */
-    public function initialize()
+    protected function initialize()
     {
 
     }
@@ -79,7 +83,7 @@ abstract class Controller
     /**
      * Function after execute action
      */
-    public function finalize()
+    protected function finalize()
     {
 
     }
